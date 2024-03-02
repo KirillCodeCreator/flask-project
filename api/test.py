@@ -38,7 +38,7 @@ def test_wrong_type_get_job():
 
 
 def test_job_post_empty():
-    """пустой запрос"""
+    """Проверка, что метод POST для создания работы завершится с ошибкой, если будет передан пустой запрос"""
     data = {}
     resp = requests.post(f"{BASE_URL}/api/jobs", json=data)
     assert resp.status_code == 400 and "Empty request" in resp.json()["error"]
@@ -46,7 +46,7 @@ def test_job_post_empty():
 
 
 def test_job_post_with_missing_fields():
-    """Поле is_finished отсутствует"""
+    """Проверка, что метод POST для создания работы завершится с ошибкой, если в запросе поле is_finished отсутствует"""
     data = {
         "team_leader_id": 4,
         "job": "Working hard",
@@ -60,7 +60,8 @@ def test_job_post_with_missing_fields():
 
 
 def test_job_post_with_unknown_team_leader_id():
-    """не существует пользователь в бд"""
+    """Проверка, что метод POST для создания работы завершится с ошибкой,
+     если в запросе будет передан не существующий в БД team_leader_id"""
     data = {
         "team_leader_id": 999,
         "job": "Working hard",
@@ -76,7 +77,8 @@ def test_job_post_with_unknown_team_leader_id():
 
 
 def test_job_post():
-    """успешное создание работы и проверка по созданному id"""
+    """Проверка, что метод POST для создания работы завершится успешно и
+     проверка наличия работы по созданному id завершиться успешно"""
     data = {
         "team_leader_id": 4,
         "job": "Test working",
@@ -101,7 +103,7 @@ print(f'Получение одной работы - {test_get_job()}')
 print(f'Получение несуществующей работы - {test_wrong_get_job()}')
 print(f'Получение работы с неверным типом id - {test_wrong_type_get_job()}')
 
-print(f'Создание работы с пустым запросом - {test_job_post_empty()}')
-print(f'Создание работы с неполным запросом - {test_job_post_with_missing_fields()}')
-print(f'Создание работы с несуществующим тим лидом  - {test_job_post_with_unknown_team_leader_id()}')
+print(f'Попытка создания работы с пустым запросом - {test_job_post_empty()}')
+print(f'Попытка создания работы с неполным запросом - {test_job_post_with_missing_fields()}')
+print(f'Попытка создания работы с несуществующим тим лидом  - {test_job_post_with_unknown_team_leader_id()}')
 print(f'Создание работы и проверка создания - {test_job_post()}')
