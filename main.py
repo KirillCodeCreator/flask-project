@@ -1,10 +1,9 @@
 import requests
 from flask import Flask, render_template, redirect, flash, request, abort, url_for, make_response, jsonify
-from flask_login import login_user, LoginManager, login_required, current_user
+from flask_login import login_user, LoginManager, login_required, current_user, logout_user
 
 from api import jobs_api, users_api
 from data import db_session
-from data.data_seed import add_data_to_db
 from data.departments import Department
 from data.jobs import Jobs
 from data.users import User
@@ -23,7 +22,7 @@ def load_user(user_id):
     return db_sess.get(User, user_id)
 
 
-@app.route("/addjob", methods=["GET", "POST"])
+@app.route("/add-job", methods=["GET", "POST"])
 @login_required
 def add_job():
     form = AddJobForm()
@@ -123,6 +122,13 @@ def login():
         flash("Неправильный логин или пароль", "danger")
         return render_template("login.html", form=form)
     return render_template("login.html", title="Авторизация", form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route("/add-department", methods=["GET", "POST"])
@@ -246,7 +252,7 @@ def users_show(user_id):
 def main():
     db_session.global_init("db/blogs.db")
     # для пересоздания таблиц раскоментировать ниже метод add_data_to_db(), предаврительно удалив файл БД db/blogs.db
-    #add_data_to_db()
+    # add_data_to_db()
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
 
