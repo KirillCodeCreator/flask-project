@@ -74,4 +74,4 @@ data4 = {
 }
 print(put(f"{BASE_URL}/api/jobs/2", json=data4).json())  # Тест - Корректный запрос на редактирование работы
 
-print(get(f"{BASE_URL}/api/jobs").json())  # Тест - получение всех работ для проверки удаления
+print(get(f"{BASE_URL}/api/jobs").json())  # Тест - получение всех работ для проверки редактирования
