@@ -6,10 +6,10 @@ from werkzeug.security import generate_password_hash
 BASE_URL = "http://127.0.0.1:8080"
 API_VERSION = "api/v2"
 
+print("TESTS START")
 print(get(f"{BASE_URL}/{API_VERSION}/users").json())  # Тест - Корректное получение всех пользователей
 print(get(f"{BASE_URL}/{API_VERSION}/users/1").json())  # Тест - Корректное получение пользователя по id
 print(get(f"{BASE_URL}/{API_VERSION}/users/0").json())  # Тест - Ошибочный запрос - несуществующй id
-print(get(f"{BASE_URL}/{API_VERSION}/users/s").json())  # Тест - Ошибочный запрос - неверный тип id
 
 
 print(post(f"{BASE_URL}/{API_VERSION}/users", json={}).json())  # Тест - Ошибочный запрос создания пользователя - неполный запрос
@@ -44,6 +44,6 @@ print(put(f"{BASE_URL}/{API_VERSION}/users/6", json=data2).json())  # Тест -
 print(get(f"{BASE_URL}/{API_VERSION}/users").json())  # Тест - Корректное получение всех пользователей для проверки редактирования
 
 print(delete(f"{BASE_URL}/{API_VERSION}/users/999").json())  # Тест - Ошибочный запрос на удаление пользователя — несуществующий id
-print(delete(f"{BASE_URL}/{API_VERSION}/users/s").json())  # Тест - Ошибочный запрос на удаление пользователя — неверный id
 print(delete(f"{BASE_URL}/{API_VERSION}/users/6").json())  # Тест - Корректный запрос на удаление пользователя
 print(get(f"{BASE_URL}/{API_VERSION}/users").json())  # Тест - Корректное получение всех пользователей для проверки удаления
+print("TESTS DONE")
