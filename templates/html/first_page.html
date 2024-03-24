@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Главная страница</title>
+  <link rel="stylesheet" href="../css/first_page.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">FLASK-project</div>
+      <div>
+        <button class="btn-login">Вход</button>
+        <button class="btn-register">Регистрация</button>
+      </div>
+    </header>
+    <section>
+      <h1>Добро пожаловать на наш сайт!</h1>
+      <div class="hero-image">
+        <img src="../static/main.jpg" alt="Главное изображение">
+      </div>
+      <div class="description">
+        <p>Благодаря удобному интерфейсу и быстрой навигации, пользователи могут выбрать нужного специалиста, ознакомиться с его расписанием и забронировать удобное время приема, экономя тем самым свое время и избегая лишних очередей в клиниках.</p>
+      </div>
+    </section>
+    <div class="popup" id="login-popup">
+      <div class="popup-content">
+        <h2>Вход</h2>
+        <form class="popup-form">
+          <input type="text" placeholder="Электронная почта/логин">
+          <input type="password" placeholder="Пароль">
+          <button>Войти</button>
+        </form>
+        <p>Забыли пароль? <a href="#">Восстановить пароль</a></p>
+      </div>
+    </div>
+    <div class="popup" id="register-popup">
+      <div class="popup-content">
+        <h2>Регистрация</h2>
+        <form class="popup-form">
+          <input type="text" placeholder="Имя">
+          <input type="text" placeholder="Электронная почта/логин">
+          <input type="password" placeholder="Пароль">
+          <button>Зарегистрироваться</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/first_page.js"></script>
+</body>
+</html>
