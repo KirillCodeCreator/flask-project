@@ -262,5 +262,10 @@ def main():
     app.run("", port=8080)
 
 
+@app.route("/help")
+def help_page():
+    return render_template("help.html")
+
+
 if __name__ == '__main__':
     main()
