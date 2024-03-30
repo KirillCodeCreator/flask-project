@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Пациент</title>
+  <style>
+    /* Стили для всплывающих окон */
+    .modal {
+      display: none; /* Скрываем окно по умолчанию */
+      position: fixed; /* Фиксированное положение */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5); /* Полупрозрачный черный фон */
+    }
+    
+    .modal-content {
+      background-color: white;
+      width: 50%;
+      margin: 100px auto;
+      padding: 20px;
+    }
+    
+    .close-button {
+      float: right; /* Кнопка для закрытия справа */
+      cursor: pointer;
+    }
+    
+    /* Стили для таблицы */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Кнопки "Мои приемы" и "Записаться" -->
+  <button onclick="openMyAppointments()">Мои приемы</button>
+  <button onclick="openSchedule()">Записаться</button>
+
+  <!-- Всплывающее окно с таблицей расписания -->
+  <div id="scheduleModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeSchedule()">×</span>
+      <h2>Расписание свободных врачей</h2>
+      <table>
+        <tr>
+          <th>Специальность</th>
+          <th>Свободное время</th>
+        </tr>
+        <!-- Здесь можно добавить строки с информацией о врачах и их расписании -->
+      </table>
+    </div>
+  </div>
+
+  <!-- Всплывающее окно с таблицей "Мои приемы" -->
+  <div id="myAppointmentsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeMyAppointments()">×</span>
+      <h2>Мои приемы</h2>
+      <table>
+        <tr>
+          <th>Дата</th>
+          <th>Время</th>
+          <th>Врач</th>
+        </tr>
+        <!-- Здесь можно добавить строки с информацией о записанных приемах -->
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Функция для открытия окна с расписанием
+    function openSchedule() {
+      document.getElementById("scheduleModal").style.display = "block";
+    }
+
+    // Функция для закрытия окна с расписанием
+    function closeSchedule() {
+      document.getElementById("scheduleModal").style.display = "none";
+    }
+
+    // Функция для открытия окна с "Моими приемами"
+    function openMyAppointments() {
+      document.getElementById("myAppointmentsModal").style.display = "block";
+    }
+
+    // Функция для закрытия окна с "Моими приемами"
+    function closeMyAppointments() {
+      document.getElementById("myAppointmentsModal").style.display = "none";
+    }
+  </script>
+</body>
+</html>
