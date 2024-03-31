@@ -41,7 +41,7 @@ def add_job():
         )
         db_sess.add(job)
         db_sess.commit()
-        return redirect("/")
+        return redirect("/jobs-wall")
     return render_template("add_job.html", form=form, title="Adding a job")
 
 
@@ -89,7 +89,7 @@ def delete_job(job_id):
         db_sess.commit()
     else:
         abort(404)
-    return redirect("/")
+    return redirect("/jobs-wall")
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -122,7 +122,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect("/jobs-wall")
         flash("Неправильный логин или пароль", "danger")
         return render_template("login.html", form=form)
     return render_template("login.html", title="Авторизация", form=form)
@@ -209,6 +209,15 @@ def departments_list():
 
 
 @app.route("/")
+def main_page():
+    '''
+    db_sess = db_session.create_session()
+    jobs = db_sess.query(Jobs).all()
+    return render_template("work_log.html", jobs=jobs)'''
+    return render_template("main.html")
+
+
+@app.route("/jobs-wall")
 def work_log():
     db_sess = db_session.create_session()
     jobs = db_sess.query(Jobs).all()
