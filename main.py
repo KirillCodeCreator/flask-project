@@ -217,6 +217,11 @@ def main_page():
     return render_template("main.html")
 
 
+@app.route("/choice")
+def choice_page():
+    return render_template('choice.html')
+
+
 @app.route("/jobs-wall")
 def work_log():
     db_sess = db_session.create_session()
