@@ -9,5 +9,41 @@
     <div style="text-align: center;">
       <img src="static/first.jpg" alt="главная картинка" width="1000px" height="500px">
     </div>
+  <script>
+    // Создаем функцию для получения адреса пользователя
+async function getAddress() {
+  try {
+    // Отправляем GET запрос на API для получения местоположения
+    const response = await fetch('https://api.geoiplookup.io/');
+    const data = await response.json();
+
+    // Получаем координаты пользователя
+    const latitude = data.latitude;
+    const longitude = data.longitude;
+
+    // Создаем DOM элементы для отображения адреса и карты
+    const addressElement = document.createElement('div');
+    const mapElement = document.createElement('img');
+
+    // Устанавливаем адрес пользователя
+    addressElement.innerText = Your location: ${data.city}, ${data.country_name};
+    addressElement.style.textAlign = 'center';
+
+    // Устанавливаем изображение с местоположением на карте
+    mapElement.src = https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=10&size=400x300&key=YOUR_API_KEY;
+    mapElement.style.display = 'block';
+    mapElement.style.margin = '0 auto';
+
+    // Добавляем элементы на страницу
+    document.body.appendChild(addressElement);
+    document.body.appendChild(mapElement);
+  } catch (error) {
+    console.log('Error:', error);
+  }
+}
+
+// Вызываем функцию для получения адреса пользователя
+getAddress();
+  </script>
   </body>
 {% endblock %}
