@@ -7,8 +7,13 @@ from data import db_session
 from data.users import User
 
 
-class PatientForm(FlaskForm):
+class RegisterPatient(FlaskForm):
     login = EmailField("Логин пациента", validators=[DataRequired()])
+
+    def validate_login(form, field):
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == field.data).first():
+            raise ValidationError("Такой пользователь уже существует")
 
     password = PasswordField("Пароль", validators=[DataRequired()])
     repeat_password = PasswordField("Повторите пароль",
@@ -17,15 +22,10 @@ class PatientForm(FlaskForm):
     name = StringField("Имя")
     age = IntegerField("Возраст", validators=[NumberRange(1, 99)])
     submit = SubmitField("Submit")
-    '''
-        def validate_login(form, field):
-            db_sess = db_session.create_session()
-            if db_sess.query(User).filter(User.email == field.data).first():
-                raise ValidationError("Такой пользователь уже существует")
-    '''
 
 
-class LoginForm(FlaskForm):
+class LoginPatient(FlaskForm):
     email = EmailField('Логин', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
+    remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')

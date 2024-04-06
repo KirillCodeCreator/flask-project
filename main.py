@@ -13,7 +13,7 @@ from data.users import User
 from forms.departments import AddDepartmentForm
 from forms.jobs import AddJobForm
 from forms.users import RegisterForm, LoginForm
-from forms.patient import PatientForm
+from forms.patient import RegisterPatient, LoginPatient
 from data.patients import Patients
 
 app = Flask(__name__)
@@ -118,7 +118,7 @@ def register():
 
 @app.route('/reg_pat', methods=['GET', 'POST'])
 def reg_pat():
-    form = PatientForm()
+    form = RegisterForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         patient = Patients(
@@ -146,6 +146,20 @@ def login():
         flash("Неправильный логин или пароль", "danger")
         return render_template("login.html", form=form)
     return render_template("login.html", title="Авторизация", form=form)
+
+
+@app.route('/log_pat', methods=['GET', 'POST'])
+def log_pat():
+    form = LoginPatient()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        patient = db_sess.query(Patients).filter(Patients.email == form.email.data).first()
+        if patient and patient.check_password(form.password.data):
+            login_user(patient, remember=form.remember_me.data)
+            return redirect("/")
+        flash("Неправильный логин или пароль", "danger")
+        return render_template("login.html", form=form)
+    return render_template("log_pat.html", title="Пациент", form=form)
 
 
 @app.route('/logout')
