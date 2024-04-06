@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <title>Панель администратора больницы</title>
+</head>
+<body>
+    <h1>Добро пожаловать, администратор!</h1>
+    <p>Здесь вы можете зарегистрировать нового пациента или врача, а также посмотреть справочник профессий.</p>
+
+    <button onclick="registerPatient()">Зарегистрировать пациента</button>
+    <button onclick="registerDoctor()">Зарегистрировать врача</button>
+    <button onclick="viewProfessions()">Справочник профессий</button>
+
+    <script>
+        function registerPatient() {
+        window.location.href = '/reg_pat'
+        }
+
+        function registerDoctor() {
+            // Логика для регистрации врача
+            alert("Форма регистрации врача будет отображена здесь.");
+        }
+
+        function viewProfessions() {
+            // Логика для просмотра справочника профессий
+            alert("Справочник профессий будет отображен здесь.");
+        }
+    </script>
+</body>
+{% endblock %}
