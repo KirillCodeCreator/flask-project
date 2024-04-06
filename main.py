@@ -13,6 +13,8 @@ from data.users import User
 from forms.departments import AddDepartmentForm
 from forms.jobs import AddJobForm
 from forms.users import RegisterForm, LoginForm
+from forms.patient import PatientForm
+from data.patients import Patients
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -114,6 +116,24 @@ def register():
     return render_template("register.html", title="Регистрация", form=form)
 
 
+@app.route('/reg_pat', methods=['GET', 'POST'])
+def reg_pat():
+    form = PatientForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        patient = Patients(
+            surname=form.surname.data,
+            name=form.name.data,
+            age=form.age.data,
+            email=form.login.data
+        )
+        patient.set_password(form.password.data)
+        db_sess.add(patient)
+        db_sess.commit()
+        return redirect('/admin')
+    return render_template('reg_pat.html', title='Пациент', form=form)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -133,6 +153,11 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/admin')
+def admin_page():
+    return render_template('admin.html')
 
 
 @app.route("/add-department", methods=["GET", "POST"])
