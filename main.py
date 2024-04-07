@@ -2,7 +2,7 @@ import requests
 from flask import Flask, render_template, redirect, flash, request, abort, url_for, make_response, jsonify
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user
 from flask_restful import Api
-
+from flask import request
 from api import jobs_api, users_api
 from api.jobs_resource import init_api_v2_routes_jobs
 from api.users_resource import init_api_v2_routes
@@ -14,7 +14,9 @@ from forms.departments import AddDepartmentForm
 from forms.jobs import AddJobForm
 from forms.users import RegisterForm, LoginForm
 from forms.patient import RegisterPatient, LoginPatient
+from forms.admin import LoginAdmin
 from data.patients import Patients
+from data.admin import Admin
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -160,6 +162,22 @@ def log_pat():
         flash("Неправильный логин или пароль", "danger")
         return render_template("login.html", form=form)
     return render_template("log_pat.html", title="Пациент", form=form)
+
+
+@app.route('/log_admin', methods=['GET', 'POST'])
+def log_admin():
+    form = LoginAdmin()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        email = request.form['email']
+        password = request.form['password']
+        admin_t = db_sess.query(Admin).filter(Admin.email == form.email.data).first()
+        if email == 'admin@mail.ru' and password == 'r':
+            login_user(admin_t, remember=form.remember_me.data)
+            return redirect("/admin")
+        flash("Неправильный логин или пароль", "danger")
+        return render_template("log_admin.html", form=form)
+    return render_template("log_admin.html", title="Admin", form=form)
 
 
 @app.route('/logout')
