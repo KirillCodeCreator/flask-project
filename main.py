@@ -192,6 +192,16 @@ def admin_page():
     return render_template('admin.html')
 
 
+@app.route('/patient')
+def patient_page():
+    return render_template('patient_page.html')
+
+
+@app.route('/doctor')
+def doctor_page():
+    return render_template('doctor_page.html')
+
+
 @app.route("/add-department", methods=["GET", "POST"])
 @login_required
 def add_department():
