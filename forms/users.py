@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField, EmailField, IntegerField, BooleanField
+from wtforms import PasswordField, StringField, SubmitField, EmailField, IntegerField, BooleanField, DateField
 from wtforms.validators import DataRequired, EqualTo, NumberRange
 from wtforms.validators import ValidationError
 
@@ -7,7 +7,7 @@ from data import db_session
 from data.users import User
 
 
-class RegisterForm(FlaskForm):
+class RegisterDoctorForm(FlaskForm):
     login = EmailField("Login / email", validators=[DataRequired()])
 
     def validate_login(form, field):
@@ -18,9 +18,9 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     repeat_password = PasswordField("Repeat Password",
                                     validators=[EqualTo("password", "Пароли должны совпадать")])
-    surname = StringField("Surname")
-    name = StringField("Name")
-    age = IntegerField("Age", validators=[NumberRange(1, 99)])
+    firstname = StringField("Firstname")
+    lastname = StringField("Lastname")
+    datebirth = DateField('Date', format='/%d/%m/%Y')
     position = StringField("Position")
     speciality = StringField("Speciality")
     address = StringField("Address")

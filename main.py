@@ -9,19 +9,13 @@ from api.users_resource import init_api_v2_routes
 from config import SQLALCHEMY_DATABASE_URI
 from data import db_session
 from data.data_seed import add_data_to_db
-from data.departments import Department
-from data.jobs import Jobs
 from data.users import User
-from forms.departments import AddDepartmentForm
-from forms.jobs import AddJobForm
-from forms.users import RegisterForm, LoginForm
-from forms.patient import RegisterPatient, LoginPatient
+from forms.users import RegisterDoctorForm, LoginForm
 from forms.admin import LoginAdmin
-from data.patients import Patients
-from data.admin import Admin
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'flask_project_secret_key'
+app.config['DATETIME_FORMAT'] = '%d/%m/%Y'
 login_manager = LoginManager(app)
 api = Api(app)
 
@@ -35,7 +29,7 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.get(User, user_id)
 
-
+'''
 @app.route("/add-job", methods=["GET", "POST"])
 @login_required
 def add_job():
@@ -53,8 +47,8 @@ def add_job():
         db_sess.commit()
         return redirect("/jobs-wall")
     return render_template("add_job.html", form=form, title="Adding a job")
-
-
+'''
+'''
 @app.route("/edit-job/<int:job_id>", methods=["GET", "POST"])
 @login_required
 def edit_job(job_id):
@@ -86,8 +80,8 @@ def edit_job(job_id):
         else:
             abort(404)
     return render_template("add_job.html", title="Редактирование работы", form=form)
-
-
+'''
+'''
 @app.route("/delete-job/<int:job_id>", methods=["GET", "POST"])
 @login_required
 def delete_job(job_id):
@@ -100,32 +94,31 @@ def delete_job(job_id):
     else:
         abort(404)
     return redirect("/jobs-wall")
+'''
 
-
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    form = RegisterForm()
+@app.route("/register_doctor", methods=['GET', 'POST'])
+def register_doctor():
+    form = RegisterDoctorForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = User(
-            surname=form.surname.data,
-            name=form.name.data,
-            age=form.age.data,
-            position=form.position.data,
-            speciality=form.speciality.data,
-            address=form.address.data,
-            city_from=form.city_from.data,
+            firstname=form.firstname.data,
+            lastname=form.lastname.data,
+            datebirth=form.datebirth.data,
+            location=form.location.data,
+            #speciality=form.speciality.data,
             email=form.login.data,
+            roles=form.roles.data,
         )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
         return redirect("/login")
-    return render_template("register.html", title="Регистрация", form=form)
+    return render_template("register_doctor.html", title="Регистрация доктора", form=form)
 
-
-@app.route('/reg_pat', methods=['GET', 'POST'])
-def reg_pat():
+'''
+@app.route('/register_patient', methods=['GET', 'POST'])
+def register_patient():
     form = RegisterForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -140,7 +133,7 @@ def reg_pat():
         db_sess.commit()
         return redirect('/admin')
     return render_template('reg_pat.html', title='Пациент', form=form)
-
+'''
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -155,7 +148,7 @@ def login():
         return render_template("login.html", form=form)
     return render_template("login.html", title="Авторизация", form=form)
 
-
+'''
 @app.route('/log_pat', methods=['GET', 'POST'])
 def log_pat():
     form = LoginPatient()
@@ -168,8 +161,8 @@ def log_pat():
         flash("Неправильный логин или пароль", "danger")
         return render_template("login.html", form=form)
     return render_template("log_pat.html", title="Пациент", form=form)
-
-
+'''
+'''
 @app.route('/log_admin', methods=['GET', 'POST'])
 def log_admin():
     form = LoginAdmin()
@@ -184,7 +177,7 @@ def log_admin():
         flash("Неправильный логин или пароль", "danger")
         return render_template("log_admin.html", form=form)
     return render_template("log_admin.html", title="Admin", form=form)
-
+'''
 
 @app.route('/logout')
 @login_required
@@ -207,7 +200,7 @@ def patient_page():
 def doctor_page():
     return render_template('doctor_page.html')
 
-
+'''
 @app.route("/add-department", methods=["GET", "POST"])
 @login_required
 def add_department():
@@ -227,8 +220,8 @@ def add_department():
         db_sess.commit()
         return redirect("/departments")
     return render_template("add_department.html", title="Добавить работу", form=form)
-
-
+'''
+'''
 @app.route("/edit-department/<int:department_id>", methods=["GET", "POST"])
 @login_required
 def edit_department(department_id):
@@ -258,8 +251,8 @@ def edit_department(department_id):
         else:
             abort(404)
     return render_template("add_department.html", title="Изменить работу", form=form)
-
-
+'''
+'''
 @app.route("/delete-department/<int:department_id>")
 @login_required
 def delete_department(department_id):
@@ -272,14 +265,14 @@ def delete_department(department_id):
     else:
         abort(404)
     return redirect("/departments")
-
-
+'''
+'''
 @app.route("/departments")
 def departments_list():
     db_sess = db_session.create_session()
     departments = db_sess.query(Department).all()
     return render_template("departments_list.html", departments=departments)
-
+'''
 
 @app.route("/")
 def main_page():
@@ -294,14 +287,14 @@ def main_page():
 def choice_page():
     return render_template('choice.html')
 
-
+'''
 @app.route("/jobs-wall")
 def work_log():
     db_sess = db_session.create_session()
     jobs = db_sess.query(Jobs).all()
     return render_template("work_log.html", jobs=jobs)
-
-
+'''
+'''
 @app.route("/users_show/<int:user_id>")
 def users_show(user_id):
     resp = requests.get(f'{request.host_url}{url_for("users_api.get_user", user_id=user_id)}')
@@ -338,7 +331,7 @@ def users_show(user_id):
     else:
         user['city_from'] = 'empty'
         return render_template("user.html", user_data=user)
-
+'''
 
 def main():
     db_session.global_init(SQLALCHEMY_DATABASE_URI)

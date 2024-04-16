@@ -6,15 +6,8 @@ from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from .association_tables import specialization_users_table, role_users_table
 from .db_session import SqlAlchemyBase
-
-specialization_users_table = sa.Table("specialization_users", SqlAlchemyBase.metadata,
-                             sa.Column("user_id", sa.Integer, sa.ForeignKey("user.id")),
-                             sa.Column("specialization_id", sa.Integer, sa.ForeignKey("specialization.id")))
-
-role_users_table = sa.Table("role_users", SqlAlchemyBase.metadata,
-                             sa.Column("user_id", sa.Integer, sa.ForeignKey("user.id")),
-                             sa.Column("role_id", sa.Integer, sa.ForeignKey("role.id")))
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'user'
