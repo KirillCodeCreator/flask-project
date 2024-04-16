@@ -6,7 +6,9 @@ from flask import request
 from api import jobs_api, users_api
 from api.jobs_resource import init_api_v2_routes_jobs
 from api.users_resource import init_api_v2_routes
+from config import SQLALCHEMY_DATABASE_URI
 from data import db_session
+from data.data_seed import add_data_to_db
 from data.departments import Department
 from data.jobs import Jobs
 from data.users import User
@@ -19,10 +21,14 @@ from data.patients import Patients
 from data.admin import Admin
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['SECRET_KEY'] = 'flask_project_secret_key'
 login_manager = LoginManager(app)
 api = Api(app)
 
+
+@app.before_first_request
+def create_tables():
+    add_data_to_db()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -335,12 +341,12 @@ def users_show(user_id):
 
 
 def main():
-    db_session.global_init("db/blogs.db")
+    db_session.global_init(SQLALCHEMY_DATABASE_URI)
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
     init_api_v2_routes(api)
     init_api_v2_routes_jobs(api)
-    app.run("", port=8080)
+    app.run("", port=8080, debug=True)
 
 
 @app.route("/help")

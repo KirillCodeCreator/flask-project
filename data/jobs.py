@@ -4,10 +4,9 @@ from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
 
-association_table = sa.Table("jobs_to_categories", SqlAlchemyBase.metadata,
-                             sa.Column("job_id", sa.Integer, sa.ForeignKey("jobs.id")),
-                             sa.Column("category.id", sa.Integer, sa.ForeignKey("categories.id")))
-
+association_table = sa.Table("user_to_speciality", SqlAlchemyBase.metadata,
+                             sa.Column("user_id", sa.Integer, sa.ForeignKey("user.id")),
+                             sa.Column("speciality.id", sa.Integer, sa.ForeignKey("speciality.id")))
 
 class Category(SqlAlchemyBase):
     __tablename__ = "categories"

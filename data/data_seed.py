@@ -2,6 +2,7 @@ from datetime import datetime
 
 from data import db_session
 from data.jobs import Jobs, Category
+from data.role import Roles, Role
 from data.users import User
 from data.departments import Department
 from werkzeug.security import generate_password_hash
@@ -97,7 +98,7 @@ def get_categories_data():
     return categories_data
 
 
-def create_categories():
+def create_speciality():
     db_sess = db_session.create_session()
     categories = get_categories_data()
     for category_data in categories:
@@ -199,6 +200,23 @@ def get_departments_data():
     ]
     return departments_data
 
+def create_roles():
+    db_sess = db_session.create_session()
+    roles_data = [
+        {
+            "name": Roles.ADMIN,
+        },
+        {
+            "name": Roles.DOCTOR,
+        },
+        {
+            "name": Roles.PATIENT,
+        }
+    ]
+    for cursor in roles_data:
+        role = Role(**cursor)
+        db_sess.add(role)
+    db_sess.commit()
 
 def create_departments():
     db_sess = db_session.create_session()
@@ -210,7 +228,8 @@ def create_departments():
 
 
 def add_data_to_db():
+    create_roles()
     create_users()
     create_categories()
-    create_jobs()
-    create_departments()
+    #create_jobs()
+    #create_departments()
