@@ -17,7 +17,6 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     firstname = sa.Column(sa.String)
     lastname = sa.Column(sa.String)
     datebirth = sa.Column(sa.Date)
-    location = sa.Column(sa.String)
     specializations = orm.relationship("Specialization", secondary=specialization_users_table, backref="User")
     roles = orm.relationship('Role', secondary=role_users_table, backref='User')
     modified_date = sa.Column(sa.DateTime, default=datetime.now)
