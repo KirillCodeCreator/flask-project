@@ -1,81 +1,34 @@
+import json
 from datetime import datetime
 
-from data import db_session
-from data.jobs import Jobs, Category
-from data.role import Roles, Role
-from data.users import User
-from data.departments import Department
 from werkzeug.security import generate_password_hash
+
+from data import db_session
+from data.role import Roles
+from data.specialization import Specialization
+from data.users import User
 
 
 def get_users_data():
     users_data = [
         {
-            "surname": "Scott",
-            "name": "Ridley",
-            "age": 21,
-            "position": "captain",
-            "speciality": "research engineer",
-            "address": "module_1",
-            "city_from": "Washington",
-            "email": "scott_chief@mars.org",
-            "hashed_password": generate_password_hash("1"),
+            "firstname": "Иван",
+            "lastname": "Иванов",
+            "role": Roles().ADMIN,
+            "phone": "+79102222222",
+            "email": "admin@mail.ru",
+            "hashed_password": generate_password_hash("admin"),
             "modified_date": datetime.now()
-        },
-        {
-            "surname": "Weer",
-            "name": "Andy",
-            "age": 23,
-            "position": "science pilot",
-            "speciality": "drone pilot",
-            "address": "module_2",
-            "city_from": "Wellington",
-            "email": "andy_story@mars.org",
-            "hashed_password": generate_password_hash("1"),
-            "modified_date": datetime.now()
-        },
-        {
-            "surname": "Watney",
-            "name": "Mark",
-            "age": 22,
-            "position": "mission specialist",
-            "speciality": "astrogeologist",
-            "address": "module_3",
-            "city_from": "Moscow",
-            "email": "mark3@mars.org",
-            "hashed_password": generate_password_hash("1"),
-            "modified_date": datetime.now()
-        },
-        {
-            "surname": "Kapoor",
-            "name": "Venkata",
-            "age": 25,
-            "position": "flight engineer",
-            "speciality": "cyberengineer",
-            "address": "module_4",
-            "city_from": "Tunis",
-            "email": "kapoor_astro@mars.org",
-            "hashed_password": generate_password_hash("1"),
-            "modified_date": datetime.now()
-        },
-        {
-            "surname": "Bean",
-            "name": "Sean",
-            "age": 17,
-            "position": "chief engineer",
-            "speciality": "builder",
-            "address": "module_1",
-            "city_from": "Roma",
-            "email": "bean@mars.org",
-            "hashed_password": generate_password_hash("1"),
-            "modified_date": datetime.now()
-        },
+        }
     ]
     return users_data
 
 
-def create_users():
+def create_admin_user():
     db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.role == Roles().ADMIN).all()
+    if user:
+        return
     users = get_users_data()
     for user_data in users:
         user = User(**user_data)
@@ -83,27 +36,22 @@ def create_users():
     db_sess.commit()
 
 
-def get_categories_data():
-    categories_data = [
-        {
-            "name": "life support",
-        },
-        {
-            "name": "exploring planet",
-        },
-        {
-            "name": "terraforming",
-        },
-    ]
-    return categories_data
+def get_specializations_data():
+    with open("data/specializations.json", "r", encoding="utf-8") as read_file:
+        return json.load(read_file)
 
 
-def create_speciality():
+def create_specialization():
     db_sess = db_session.create_session()
-    categories = get_categories_data()
-    for category_data in categories:
-        category = Category(**category_data)
-        db_sess.add(category)
+    specializations_data = get_specializations_data()
+    specializations = db_sess.query(Specialization).all()
+    specializations = [specialization.title for specialization in specializations]
+    for specialization_data in specializations_data['specializations']:
+        if specialization_data['title'] in specializations:
+            continue
+        specialization = Specialization(**specialization_data)
+        db_sess.add(specialization)
+
     db_sess.commit()
 
 
@@ -149,6 +97,7 @@ def get_jobs_data():
     return jobs_data
 
 
+'''
 def create_jobs():
     db_sess = db_session.create_session()
     jobs = get_jobs_data()
@@ -163,73 +112,8 @@ def create_jobs():
             job.categories.append(category)
         db_sess.add(job)
     db_sess.commit()
+'''
 
-
-def get_departments_data():
-    departments_data = [
-        {
-            "title": "Department of geological exploration",
-            "chief_id": 2,
-            "members": "3, 4, 5",
-            "email": "geo@mars.org",
-        },
-        {
-            "title": "Department of biological research",
-            "chief_id": 3,
-            "members": "7, 10, 11",
-            "email": "bio@mars.org",
-        },
-        {
-            "title": "Department of construction",
-            "chief_id": 5,
-            "members": "16, 17, 28",
-            "email": "build@mars.org",
-        },
-        {
-            "title": "Department of transportation",
-            "chief_id": 4,
-            "members": "26, 37, 19",
-            "email": "transport@mars.org",
-        },
-        {
-            "title": "Department of terraforming",
-            "chief_id": 1,
-            "members": "1, 2, 5",
-            "email": "terra@mars.org",
-        },
-    ]
-    return departments_data
-
-def create_roles():
-    db_sess = db_session.create_session()
-    roles_data = [
-        {
-            "name": Roles.ADMIN,
-        },
-        {
-            "name": Roles.DOCTOR,
-        },
-        {
-            "name": Roles.PATIENT,
-        }
-    ]
-    for cursor in roles_data:
-        role = Role(**cursor)
-        db_sess.add(role)
-    db_sess.commit()
-
-def create_departments():
-    db_sess = db_session.create_session()
-    departments = get_departments_data()
-    for department_data in departments:
-        department = Department(**department_data)
-        db_sess.add(department)
-    db_sess.commit()
-
-
-def add_data_to_db():
-    create_roles()
-    create_users()
-    create_categories()
-    #create_jobs()
-    #create_departments()
+def init_data_to_db():
+    create_admin_user()
+    create_specialization()

@@ -6,7 +6,6 @@ from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .association_tables import specialization_users_table, role_users_table
 from .db_session import SqlAlchemyBase
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
@@ -20,9 +19,11 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     phone = sa.Column(sa.String, nullable=False)
     birthday = sa.Column(sa.Date)
     polis = sa.Column(sa.String)
-    specializations = orm.relationship("Specialization", secondary=specialization_users_table, backref="User")
-    roles = orm.relationship('Role', secondary=role_users_table, backref='User')
+    specialization_id = sa.Column(sa.Integer, sa.ForeignKey('specialization.id'))  # id специальности для доктора
+    specialization = orm.relationship("Specialization")
+    role = sa.Column(sa.String, nullable=False)
     modified_date = sa.Column(sa.DateTime, default=datetime.now)
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 

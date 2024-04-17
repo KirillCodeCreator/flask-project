@@ -4,20 +4,19 @@ import flask
 from flask import jsonify, make_response, request
 
 from data import db_session
-from data.jobs import Jobs
 from data.users import User
 
+'''
 blueprint = flask.Blueprint(
     'jobs_api',
     __name__,
     template_folder='templates'
 )
 
-
 @blueprint.route('/api/jobs')
 def get_jobs():
     db_sess = db_session.create_session()
-    jobs = db_sess.query(Jobs).all()
+    #jobs = db_sess.query(Jobs).all()
 
     return jsonify(
         {
@@ -120,4 +119,4 @@ def edit_job(job_id):
     job.end_date = end_date
     job.is_finished = request.json["is_finished"]
     db_sess.commit()
-    return jsonify({'success': 'OK'})
+    return jsonify({'success': 'OK'})'''

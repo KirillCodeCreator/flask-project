@@ -1,28 +1,21 @@
-import requests
-from flask import Flask, render_template, redirect, flash, request, abort, url_for, make_response, jsonify
-from flask_login import login_user, LoginManager, login_required, current_user, logout_user
+from flask import Flask, render_template, redirect, flash
+from flask_login import login_user, LoginManager, login_required, logout_user
 from flask_restful import Api
-from flask import request
-from api import jobs_api, users_api
-from api.jobs_resource import init_api_v2_routes_jobs
-from api.users_resource import init_api_v2_routes
-from config import SQLALCHEMY_DATABASE_URI
+
+from api.specialization.specialization_resource import add_api_specializations_routes
+
 from data import db_session
-from data.data_seed import add_data_to_db
+from data.data_seed import init_data_to_db
 from data.users import User
 from forms.users import RegisterDoctorForm, LoginForm
-from forms.admin import LoginAdmin
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'flask_project_secret_key'
 app.config['DATETIME_FORMAT'] = '%d/%m/%Y'
+app.config['JSON_AS_ASCII'] = False
 login_manager = LoginManager(app)
+login_manager.login_message = "Авторизация усепшно выполнена"
 api = Api(app)
-
-
-@app.before_first_request
-def create_tables():
-    add_data_to_db()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -276,11 +269,12 @@ def departments_list():
 
 @app.route("/")
 def main_page():
+    return "Started"
     '''
     db_sess = db_session.create_session()
     jobs = db_sess.query(Jobs).all()
-    return render_template("work_log.html", jobs=jobs)'''
-    return render_template("main.html")
+    return render_template("work_log.html", jobs=jobs)
+    return render_template("main.html")'''
 
 
 @app.route("/choice")
@@ -334,17 +328,15 @@ def users_show(user_id):
 '''
 
 def main():
-    db_session.global_init(SQLALCHEMY_DATABASE_URI)
-    app.register_blueprint(jobs_api.blueprint)
-    app.register_blueprint(users_api.blueprint)
-    init_api_v2_routes(api)
-    init_api_v2_routes_jobs(api)
-    app.run("", port=8080, debug=True)
-
+    db_session.global_init("data.db")
+    init_data_to_db()
+    add_api_specializations_routes(api)
+    app.run("", port=5000)
 
 @app.route("/help")
 def help_page():
-    return render_template("help.html")
+    return "help"
+    #return render_template("help.html")
 
 
 if __name__ == '__main__':

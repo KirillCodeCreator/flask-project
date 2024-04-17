@@ -6,4 +6,4 @@ from data.db_session import SqlAlchemyBase
 class Specialization(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "specialization"
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    name = sa.Column(sa.String)
+    title = sa.Column(sa.String)

@@ -3,26 +3,30 @@ from flask_restful import Resource, abort, Api
 
 from api.reqparse_job import parser
 from data import db_session
-from data.jobs import Jobs
+from data.specialization import Specialization
 
 
-def abort_missing_job(job_id):
+def abort_missing_job(specialization_id):
     db_sess = db_session.create_session()
-    job = db_sess.get(Jobs, job_id)
-    if not job:
-        abort(404, message=f"Job {job_id} not found")
+    specialization = db_sess.get(Specialization, specialization_id)
+    if not specialization:
+        abort(404, message=f"Job {specialization_id} not found")
 
 
 class JobsResource(Resource):
     def get(self, job_id):
+        pass
+        '''
         abort_missing_job(job_id)
         db_sess = db_session.create_session()
         job = db_sess.query(Jobs).get(job_id)
         return jsonify(
             {"jobs": [job.to_dict()]}
-        )
+        )'''
 
     def put(self, job_id):
+        pass
+        '''
         abort_missing_job(job_id)
         args = parser.parse_args()
         db_sess = db_session.create_session()
@@ -35,26 +39,29 @@ class JobsResource(Resource):
         job.end_date = args.get("end_date")
         job.is_finished = args.get("is_finished", False)
         db_sess.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({'success': 'OK'})'''
 
     def delete(self, job_id):
-        abort_missing_job(job_id)
+        pass
+        '''abort_missing_job(job_id)
         db_sess = db_session.create_session()
         job = db_sess.get(Jobs, job_id)
         db_sess.delete(job)
         db_sess.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({'success': 'OK'})'''
 
 
-class JobsListResource(Resource):
+class SpecializationsListResource(Resource):
     def get(self):
         db_sess = db_session.create_session()
-        jobs = db_sess.query(Jobs).all()
+        specializations = db_sess.query(Specialization).all()
         return jsonify(
-            {"jobs": [job.to_dict() for job in jobs]}
+            {"specializations": [specializations.to_dict() for specialization in specializations]}
         )
 
     def post(self):
+        pass
+        '''
         args = parser.parse_args()
         db_sess = db_session.create_session()
         job = Jobs(
@@ -72,7 +79,7 @@ class JobsListResource(Resource):
             {
                 'Success': 'OK',
                 'id': job.id
-            })
+            })'''
 
 
 def init_api_v2_routes_jobs(api: Api):
