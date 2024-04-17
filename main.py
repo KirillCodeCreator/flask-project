@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, flash
+import requests
+from flask import Flask, render_template, redirect, flash, url_for, request, make_response, jsonify
 from flask_login import login_user, LoginManager, login_required, logout_user
 from flask_restful import Api
 
@@ -288,6 +289,24 @@ def work_log():
     jobs = db_sess.query(Jobs).all()
     return render_template("work_log.html", jobs=jobs)
 '''
+
+@app.route("/specializations")
+def specializations():
+    resp = requests.get(f'{request.host_url}api/specializations')
+    if not resp:
+        err = resp.json()["error"]
+        return make_response(jsonify(f'Error: {err}'), 404)
+    specializations = resp.json()["specializations"]
+    return specializations
+
+@app.route("/specializations/<int:specialization_id>")
+def specializations_show(specialization_id):
+    resp = requests.get(f'{request.host_url}api/specializations/{specialization_id}')
+    if not resp:
+        err = resp.json()
+        return make_response(jsonify(f'{err["message"]}'), 404)
+    specialization = resp.json()["specializations"][0]
+    return specialization
 '''
 @app.route("/users_show/<int:user_id>")
 def users_show(user_id):

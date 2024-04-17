@@ -21,7 +21,7 @@ class SpecializationResource(Resource):
         db_sess = db_session.create_session()
         specialization = db_sess.query(Specialization).get(specialization_id)
         return jsonify(
-            {"specialization": [specialization.to_dict()]}
+            {"specializations": [specialization.to_dict()]}
         )
 
     def put(self, specialization_id):
