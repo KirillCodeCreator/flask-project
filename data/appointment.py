@@ -1,23 +1,24 @@
 from sqlalchemy_serializer import SerializerMixin
 
-from data.db_session import SqlAlchemyBase
+from app import db
+#from data.db_session import SqlAlchemyBase
 from datetime import datetime
 from sqlalchemy import orm
 import sqlalchemy as sa
 
 # класс для таблицы консультаций
-class Appointment(SqlAlchemyBase, SerializerMixin):
+class Appointment(db.Model, SerializerMixin):
     __tablename__ = "appointment"
-    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    startdate = sa.Column(sa.Date, default=datetime.now(), nullable=False) #дата начала консультации
-    enddate = sa.Column(sa.Time, nullable=False) #дата и время окончания  консультации
-    doctor_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=False) # id доктора
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    startdate = db.Column(db.DateTime, default=datetime.now(), nullable=False) #дата начала консультации
+    enddate = db.Column(db.DateTime, nullable=False) #дата и время окончания  консультации
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # id доктора
     doctor = orm.relationship("User")
-    patient_id = sa.Column(sa.Integer, sa.ForeignKey('user.id')) # id пациента
+    patient_id = db.Column(db.Integer, db.ForeignKey('user.id')) # id пациента
     patient = orm.relationship("User")
-    location = sa.Column(sa.String, nullable=False) #адрес консультации
-    is_finished = sa.Column(sa.Boolean, default=False)
-    result = sa.Column(sa.Text)  # описание результата, диагноз
+    location = db.Column(db.String, nullable=False) #адрес консультации
+    is_finished = db.Column(db.Boolean, default=False)
+    result = db.Column(db.Text)  # описание результата, диагноз
 
     def __repr__(self):
         return f"<Jobs {self.id} {self.doctor} {self.date} {self.time} {self.location}>"

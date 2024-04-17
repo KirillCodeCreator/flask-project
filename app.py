@@ -1,33 +1,54 @@
 import requests
 from flask import Flask, render_template, redirect, flash, request, abort, url_for, make_response, jsonify
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user
+from flask_migrate import Migrate
 from flask_restful import Api
 from flask import request
-from api import jobs_api, users_api
-from api.jobs_resource import init_api_v2_routes_jobs
-from api.users_resource import init_api_v2_routes
+from flask_sqlalchemy import SQLAlchemy
+
+#from api import jobs_api, users_api
+#from api.jobs_resource import init_api_v2_routes_jobs
+#from api.users_resource import init_api_v2_routes
 from config import SQLALCHEMY_DATABASE_URI
 from data import db_session
-from data.data_seed import add_data_to_db
-from data.users import User
-from forms.users import RegisterDoctorForm, LoginForm
-from forms.admin import LoginAdmin
+#from data.data_seed import add_data_to_db
+#from data.users import User
+#from forms.users import RegisterDoctorForm, LoginForm
+#from forms.admin import LoginAdmin
+from data import users, appointment, role, specialization
+
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+class Config(object):
+    # ...
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'flask_project_secret_key'
 app.config['DATETIME_FORMAT'] = '%d/%m/%Y'
 login_manager = LoginManager(app)
+login_manager.login_message = "Вы успешно зарегистрировались!"
+login_manager.login_view = "/login"
 api = Api(app)
 
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-@app.before_first_request
+@app.before_request
 def create_tables():
-    add_data_to_db()
+    pass
+    #add_data_to_db()
 
+'''
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.get(User, user_id)
+'''
 
 '''
 @app.route("/add-job", methods=["GET", "POST"])
@@ -95,7 +116,7 @@ def delete_job(job_id):
         abort(404)
     return redirect("/jobs-wall")
 '''
-
+'''
 @app.route("/register_doctor", methods=['GET', 'POST'])
 def register_doctor():
     form = RegisterDoctorForm()
@@ -115,7 +136,7 @@ def register_doctor():
         db_sess.commit()
         return redirect("/login")
     return render_template("register_doctor.html", title="Регистрация доктора", form=form)
-
+'''
 '''
 @app.route('/register_patient', methods=['GET', 'POST'])
 def register_patient():
@@ -134,7 +155,7 @@ def register_patient():
         return redirect('/admin')
     return render_template('reg_pat.html', title='Пациент', form=form)
 '''
-
+'''
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -147,7 +168,7 @@ def login():
         flash("Неправильный логин или пароль", "danger")
         return render_template("login.html", form=form)
     return render_template("login.html", title="Авторизация", form=form)
-
+'''
 '''
 @app.route('/log_pat', methods=['GET', 'POST'])
 def log_pat():
@@ -334,11 +355,11 @@ def users_show(user_id):
 '''
 
 def main():
-    db_session.global_init(SQLALCHEMY_DATABASE_URI)
-    app.register_blueprint(jobs_api.blueprint)
-    app.register_blueprint(users_api.blueprint)
-    init_api_v2_routes(api)
-    init_api_v2_routes_jobs(api)
+    #db_session.global_init("db/data.db")
+    #app.register_blueprint(jobs_api.blueprint)
+    #app.register_blueprint(users_api.blueprint)
+    #init_api_v2_routes(api)
+    #init_api_v2_routes_jobs(api)
     app.run("", port=8080, debug=True)
 
 

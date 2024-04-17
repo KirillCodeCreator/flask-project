@@ -4,8 +4,8 @@ import flask
 from flask import jsonify, make_response, request
 
 from data import db_session
-from data.jobs import Jobs
-from data.users import User
+from data.old.jobs import Jobs
+#from data.users import User
 
 blueprint = flask.Blueprint(
     'jobs_api',
@@ -49,6 +49,7 @@ def get_one_jobs(job_id):
     )
 
 
+'''
 @blueprint.route("/api/jobs/", methods=["POST"])
 def create_job():
     if not request.json:
@@ -81,7 +82,7 @@ def create_job():
             'Success': 'OK',
             'id': job.id
         })
-
+'''
 
 @blueprint.route("/api/jobs/<int:job_id>", methods=["DELETE"])
 def delete_job(job_id):

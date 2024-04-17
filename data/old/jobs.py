@@ -2,7 +2,7 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 
-from .db_session import SqlAlchemyBase
+from data.db_session import SqlAlchemyBase
 
 association_table = sa.Table("user_to_speciality", SqlAlchemyBase.metadata,
                              sa.Column("user_id", sa.Integer, sa.ForeignKey("user.id")),

@@ -1,10 +1,12 @@
+import json
 from datetime import datetime
 
 from data import db_session
-from data.jobs import Jobs, Category
-from data.role import Roles, Role
+from data.old.jobs import Jobs, Category
+from data.role import Role, AdminRoleConfiguration, DoctorRoleConfiguration, PatientRoleConfiguration
+from data.specialization import Specialization
 from data.users import User
-from data.departments import Department
+from data.old.departments import Department
 from werkzeug.security import generate_password_hash
 
 
@@ -83,7 +85,9 @@ def create_users():
     db_sess.commit()
 
 
-def get_categories_data():
+def get_specialization_data():
+
+
     categories_data = [
         {
             "name": "life support",
@@ -98,11 +102,12 @@ def get_categories_data():
     return categories_data
 
 
-def create_speciality():
+def create_specializations():
     db_sess = db_session.create_session()
-    categories = get_categories_data()
-    for category_data in categories:
-        category = Category(**category_data)
+    with open('specializations.json') as json_file:
+        specializations = json.load(json_file)
+    for specialization in specializations:
+        category = Specialization(**specialization)
         db_sess.add(category)
     db_sess.commit()
 
@@ -204,13 +209,13 @@ def create_roles():
     db_sess = db_session.create_session()
     roles_data = [
         {
-            "name": Roles.ADMIN,
+            "name": AdminRoleConfiguration().DefaultName
         },
         {
-            "name": Roles.DOCTOR,
+            "name": DoctorRoleConfiguration().DefaultName
         },
         {
-            "name": Roles.PATIENT,
+            "name": PatientRoleConfiguration().DefaultName
         }
     ]
     for cursor in roles_data:
@@ -230,6 +235,6 @@ def create_departments():
 def add_data_to_db():
     create_roles()
     create_users()
-    create_categories()
+    create_specializations()
     #create_jobs()
     #create_departments()

@@ -1,9 +1,11 @@
-import sqlalchemy as sa
+#import sqlalchemy as sa
 from sqlalchemy_serializer import SerializerMixin
-from data.db_session import SqlAlchemyBase
+
+from app import db
+#from data.db_session import SqlAlchemyBase
 
 
-class Specialization(SqlAlchemyBase, SerializerMixin):
+class Specialization(db.Model, SerializerMixin):
     __tablename__ = "specialization"
-    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    name = sa.Column(sa.String)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String)

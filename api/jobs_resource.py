@@ -3,7 +3,7 @@ from flask_restful import Resource, abort, Api
 
 from api.reqparse_job import parser
 from data import db_session
-from data.jobs import Jobs
+from data.old.jobs import Jobs
 
 
 def abort_missing_job(job_id):
