@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated and (current_user.is_patient or current_user.is_admin) %}
+    <table class="table mb-1" style="table-layout: fixed;">
+        <thead class="table-secondary">
+            <tr>
+                {% for header in ["Специалист", "ФИО доктора", "Дата", "Время", "Диагноз", "Адрес приема", "Действия"] %}
+                    <th scope="col" class="col-md-auto">{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+{% for appointmentpatient in appointmentpatients %}
+            <tr class="align-middle">
+                <td class="table-primary">{{ appointmentpatient.appointment.doctor.specialization.title }}</td>
+                <td class="table-primary">{{ appointmentpatient.appointment.doctor.lastname }} {{ appointmentpatient.appointment.doctor.firstname }} {{ appointmentpatient.appointment.doctor.middlename }}</td>
+                <td class="table-primary">{{ appointmentpatient.appointment.date }}</td>
+                <td class="table-primary">{{ appointmentpatient.appointment.timeinterval.starttime }}</td>
+                {% if appointmentpatient.result %}
+                <td class="table-primary">{{ appointmentpatient.result }}</td>
+                {% else %}
+                <td class="table-primary"/>
+                {% endif %}
+                <td class="table-primary"><a href="{{url_for('patient_appointment_show_map', patientappointment_id=appointmentpatient.id)}}" class="btn btn-warning">Посмотреть на карте</a></td>
+                <td class="table-primary"><a href="{{url_for('patient_appointment_cancel', patientappointment_id=appointmentpatient.id)}}" class="btn btn-warning">Отменить запись</a></td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+{% endblock %}
