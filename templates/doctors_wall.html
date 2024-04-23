@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table class="table mb-1" style="table-layout: fixed;">
+        <thead class="table-secondary">
+        <tr>
+            {% for header in ["Специальность", "ФИО", "Эл. почта","Дата рождения", "Телефон", "Адрес для приема"] %}
+                <th scope="col" class="col-md-auto">{{ header }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+
+{% for doctor in doctors %}
+    <tbody class="table-light">
+        <tr class="align-middle">
+            <td class="table-primary">{{ doctor.specialization.title }}</td>
+            <td class="table-primary">{{ doctor['lastname'] }} {{ doctor['firstname'] }} {{ doctor['middlename'] }}</td>
+            <td class="table-primary">{{ doctor.email }}</td>
+            <td class="table-primary">{{ doctor.birthday }}</td>
+            <td class="table-primary">{{ doctor.phone }}</td>
+            <td class="table-primary">{{ doctor.location}} </td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+</div>
+
+{% endblock %}
+
