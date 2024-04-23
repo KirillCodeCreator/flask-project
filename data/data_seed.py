@@ -1,11 +1,12 @@
 import json
-from datetime import datetime
+import datetime
 
 from werkzeug.security import generate_password_hash
 
 from data import db_session
 from data.role import Roles
 from data.specialization import Specialization
+from data.timeinterval import TimeInterval
 from data.users import User
 
 
@@ -54,66 +55,28 @@ def create_specialization():
 
     db_sess.commit()
 
-
-def get_jobs_data():
-    jobs_data = [
-        {
-            "team_leader_id": 1,
-            "job": "Deployment of residential modules 1 and 2",
-            "work_size": 15,
-            "collaborators": "2, 3",
-            "start_date": datetime.now(),
-            "categories": [1],
-            "is_finished": False,
-        },
-        {
-            "team_leader_id": 2,
-            "job": "Exploration of mineral sources",
-            "work_size": 15,
-            "collaborators": "4, 3",
-            "start_date": datetime.now(),
-            "categories": [2],
-            "is_finished": False,
-        },
-        {
-            "team_leader_id": 3,
-            "job": "Development of management system",
-            "work_size": 25,
-            "collaborators": "5",
-            "start_date": datetime.now(),
-            "categories": [1, 3],
-            "is_finished": False,
-        },
-        {
-            "team_leader_id": 4,
-            "job": "Fix ventilation system",
-            "work_size": 20,
-            "collaborators": "2, 5",
-            "start_date": datetime.now(),
-            "categories": [1],
-            "is_finished": True,
-        },
-    ]
-    return jobs_data
-
-
-'''
-def create_jobs():
+def create_timeintervals():
     db_sess = db_session.create_session()
-    jobs = get_jobs_data()
-    for job_data in jobs:
-        categories_id = job_data.pop("categories")
-        categories = []
-        for category_id in categories_id:
-            category = db_sess.get(Category, category_id)
-            categories.append(category)
-        job = Jobs(**job_data)
-        for category in categories:
-            job.categories.append(category)
-        db_sess.add(job)
+    timeintervals = db_sess.query(TimeInterval).all()
+    times = [timeinterval.starttime for timeinterval in timeintervals]
+    starttime = datetime.time(8, 0, 0)
+    halftimedelta = datetime.timedelta (minutes=30)
+    hourtimedelta = datetime.timedelta(hours=1)
+    for i in range(0, 10):
+        if starttime in times:
+            continue
+        timeinterval = TimeInterval()
+        timeinterval.starttime = starttime
+
+        tmp_datetime = datetime.datetime.combine(datetime.date(1, 1, 1), starttime)
+        timeinterval.endtime = (tmp_datetime + halftimedelta).time()
+
+        starttime = (tmp_datetime + hourtimedelta).time()
+        db_sess.add(timeinterval)
+
     db_sess.commit()
-'''
 
 def init_data_to_db():
     create_admin_user()
     create_specialization()
+    create_timeintervals()
