@@ -1,31 +1,30 @@
+from datetime import datetime
+
+import sqlalchemy as sa
+from sqlalchemy import orm
+from sqlalchemy.orm import Mapped
 from sqlalchemy_serializer import SerializerMixin
 
+from data.appointmentpatient import AppointmentPatient
 from data.db_session import SqlAlchemyBase
-from datetime import datetime
-from sqlalchemy import orm
-import sqlalchemy as sa
+
 
 class AppointmentStatus:
     Created = "Открыт"
-    SETPATIENT = "Назначен"
     Canceled = "Отменен"
     Finished = "Завершен"
-
 
 
 # класс для таблицы консультаций
 class Appointment(SqlAlchemyBase, SerializerMixin):
     __tablename__ = "appointment"
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    startdate = sa.Column(sa.Date, default=datetime.now(), nullable=False) #дата начала консультации
-    enddate = sa.Column(sa.Date, nullable=False) #дата и время окончания консультации
-    doctor_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=False) # id доктора
+    date = sa.Column(sa.Date, nullable=False, default=datetime.today())  # дата консультации
+    timeinterval_id = sa.Column(sa.Integer, sa.ForeignKey('timeinterval.id'), nullable=False)  # время консультации
+    timeinterval = orm.relationship("TimeInterval")
+    doctor_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=False)  # id доктора
     doctor = orm.relationship("User")
-    patient_id = sa.Column(sa.Integer, sa.ForeignKey('user.id')) # id пациента
-    patient = orm.relationship("User")
-    location = sa.Column(sa.String, nullable=False) #адрес консультации
-    status = sa.Column(sa.String, nullable=False, default=AppointmentStatus().Created)
-    result = sa.Column(sa.Text)  # описание результата, диагноз
+    modified_date = sa.Column(sa.DateTime, default=datetime.now)
 
     def __repr__(self):
-        return f"<Jobs {self.id} {self.startdate} {self.enddate} {self.location} {self.doctor} {self.patient}>"
+        return f"<Прием {self.doctor.specialization} {self.doctor}, {self.date}, {self.timeinterval}, {self.location}"
