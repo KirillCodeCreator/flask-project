@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+  <button class="accordion">Как опубликовать запись на прием?</button>
+  <div class="panel">
+    <p>Воспользуйтесь пуктом меню <em>Создать прием</em><br>Выберите дату приема и время приема и нажмите на кнопку <em>"Опубликовать прием"</em><br>Дата и время не должны быть заняты ранее созданным приемом</p>
+  </div>
+
+  <button class="accordion">Как посмотреть журнал приемов?</button>
+  <div class="panel">
+    <p>Воспользуйтесь пуктом меню <em>Журнал приемов</em></p>
+  </div>
+
+  <button class="accordion">Как увидеть, что на прием записался пацинет?</button>
+  <div class="panel">
+    <p>В журнале приемов в строке с информацией о приеме в столбце <em>ФИО пацинета</em> появится запись о пациенте</p>
+  </div>
+
+  <button class="accordion">Как указать результат приема, диагноз пациента?</button>
+  <div class="panel">
+    <p>В журнале приемов в строке с информацией о приеме, если записан пациент, нажмите кнопку <em>Результат приема</em><br>В открывшемся окне введите диагноз и нажмите кнопку<em>Сохранить</em></p>
+  </div>
+
+  <script>
+    // Функция для открытия и закрытия складок
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+
+    // Функция для возвращения на страницу
+    function goBack() {
+      window.history.go(-1);
+    }
+  </script>
+</body>
+
+{% endblock %}
