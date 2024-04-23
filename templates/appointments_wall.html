@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <table class="table mb-1" style="table-layout: fixed;">
+        <thead class="table-secondary">
+            <tr>
+                {% for header in ["Дата", "Время","Специальность", "ФИО врача", "ФИО Пациента", "Диагноз"] %}
+                    <th scope="col" class="col-md-auto">{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+{% for appointment in appointments %}
+            <tr class="align-middle">
+                <td class="table-primary">{{ appointment["date"] }}</td>
+                <td class="table-primary">{{ appointment["time"] }}</td>
+                <td class="table-primary">{{ appointment["spec"]  }}</td>
+                <td class="table-primary">{{ appointment["doctor"]  }}</td>
+                {% if appointment["patient"] %}
+                <td class="table-primary">{{ appointment["patient"]}}</td>
+                {% else %}
+                <td class="table-primary"/>
+                {% endif %}
+                {% if appointment["result"] %}
+                <td class="table-primary">{{ appointment["result"]}}</td>
+                {% else %}
+                <td class="table-primary"/>
+                {% endif %}
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}
