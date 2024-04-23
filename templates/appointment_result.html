@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm">
+    <form action="" method="post" class="contact-form form-control-sm">
+    {{ form.hidden_tag() }}
+
+    {{ form.appointmentresult.label (class="form-label-sm") }}
+    {{ form.appointmentresult(class="form-control", placeholder="Внесите диагноз") }}
+    {% for error in form.appointmentresult.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    <div>{{ form.submit(type="submit", class="btn btn-primary") }}</div>
+
+</form>
+</div>
+{% endblock %}

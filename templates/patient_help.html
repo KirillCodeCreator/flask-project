@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+  <button class="accordion">Как записаться на прием к врачу?</button>
+  <div class="panel">
+    <p>Воспользуйтесь пуктом меню <em>Записаться</em><br>Далее выберите доступного для записи специалиста в доступную дату приема и время приема и нажмите на кнопку <em>"Записаться"</em><br>Если журнал пуст, значит доступных записей нет</p>
+  </div>
+
+  <button class="accordion">Как посмотреть журнал моих записей?</button>
+  <div class="panel">
+    <p>Воспользуйтесь пуктом меню <em>Журнал записей</em></p>
+  </div>
+
+  <button class="accordion">Как отменить запись на прием?</button>
+  <div class="panel">
+    <p>В журнале записей в строке записи, которую требуется отменить, нажмите на кнопку <em>Отменить запись</em></p>
+  </div>
+
+  <button class="accordion">Как просмотреть результат приема, мой диагноз?</button>
+  <div class="panel">
+    <p>В журнале записей в строке с информацией о записи есть столбец <em>Диагноз</em><br>Информация о диагнозе станет отображаться как только доктор добавит ее</p>
+  </div>
+
+  <button class="accordion">Как просмотреть карту с адресом приема?</button>
+  <div class="panel">
+    <p>В журнале записей в строке с информацией о записи нажмите на кнопку <em>Посмотреть на карте</em><br></p>
+  </div>
+  <script>
+    // Функция для открытия и закрытия складок
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+
+    // Функция для возвращения на страницу
+    function goBack() {
+      window.history.go(-1);
+    }
+  </script>
+</body>
+
+{% endblock %}
