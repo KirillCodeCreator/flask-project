@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-sm">
+    <form action="" method="post" class="contact-form form-control-sm">
+    {{ form.hidden_tag() }}
+
+    {{ form.login.label (class="form-label-sm") }}
+    {{ form.login (class="form-control", type="email", placeholder="name@example.com") }}
+    {% for error in form.login.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.password.label (class="form-label-sm")}}
+    {{ form.password (class="form-control", type="password") }}
+    {% for error in form.password.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+
+    {{ form.repeat_password.label (class="form-label-sm") }}
+    {{ form.repeat_password(class="form-control", type="password") }}
+    {% for error in form.repeat_password.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+
+    {{ form.lastname.label (class="form-label-sm") }}
+    {{ form.lastname(class="form-control") }}
+    {% for error in form.lastname.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+
+    {{ form.firstname.label (class="form-label-sm") }}
+    {{ form.firstname(class="form-control") }}
+    {% for error in form.firstname.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.middlename.label (class="form-label-sm") }}
+    {{ form.middlename(class="form-control") }}
+    {% for error in form.middlename.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.polis.label (class="form-label-sm") }}
+    {{ form.polis(class="form-control", placeholder="000-000-000 00") }}
+    {% for error in form.polis.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+
+    {{ form.birthday.label (class="form-label-sm") }}
+    {{ form.birthday(class="form-control") }}
+    {% for error in form.birthday.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.phone.label (class="form-label-sm") }}
+    {{ form.phone(class="form-control", type="tel", placeholder="+79000000000") }}
+    {% for error in form.phone.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.location.label (class="form-label-sm") }}
+    {{ form.location(class="form-control", placeholder="город, улица, дом квартира") }}
+    {% for error in form.location.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    <div>{{ form.submit(type="submit", class="btn btn-primary") }}</div>
+
+</form>
+</div>
+{% endblock %}
