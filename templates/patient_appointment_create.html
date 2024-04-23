@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <table class="table mb-1" style="table-layout: fixed;">
+        <thead class="table-secondary">
+            <tr>
+                {% for header in ["Специалист", "ФИО доктора", "Дата", "Время", "Действия"] %}
+                    <th scope="col" class="col-md-auto">{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+{% for appointment in appointments %}
+            <tr class="align-middle">
+                <td class="table-primary">{{ appointment.doctor.specialization.title }}</td>
+                <td class="table-primary">{{ appointment.doctor.lastname }} {{ appointment.doctor.firstname }} {{ appointment.doctor.middlename }}</td>
+                <td class="table-primary">{{ appointment.date }}</td>
+                <td class="table-primary">{{ appointment.timeinterval.starttime }}</td>
+                <td class="table-primary"><a href="{{url_for('patient_appointment_create', appointment_id=appointment.id)}}" class="btn btn-warning">Записаться</a></td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+{% endblock %}
