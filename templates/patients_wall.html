@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table class="table mb-1" style="table-layout: fixed;">
+        <thead class="table-secondary">
+        <tr>
+            {% for header in ["ФИО", "СНИЛС", "Дата рождения", "Телефон", "Эл. почта", "Адрес"] %}
+                <th scope="col" class="col-md-auto">{{ header }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+
+{% for patient in patients %}
+    <tbody class="table-light">
+        <tr class="align-middle">
+            <td class="table-primary">{{ patient['lastname'] }} {{ patient['firstname'] }} {{ patient['middlename'] }}</td>
+            <td class="table-primary">{{ patient.polis }}</td>
+            <td class="table-primary">{{ patient.birthday }}</td>
+            <td class="table-primary">{{ patient.phone }}</td>
+            <td class="table-primary">{{ patient.email }}</td>
+            <td class="table-primary">{{ patient.location}} </td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+</div>
+
+{% endblock %}
+
