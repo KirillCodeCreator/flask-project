@@ -23,7 +23,8 @@
 # Стек технологий
 * Языки Python и js
 * Фреймворк flask
-* Библиотеки flask-wtf, blueprint, Flask-SQLAlchemy, flask-login, flask-restful, flask-wtf, bootstrap-flask, requests, Jinja2, SQLAlchemy-serializer, Werkzeug, waitress и др.
+* Библиотеки flask-wtf, blueprint, Flask-SQLAlchemy, flask-login, flask-restful, flask-wtf, bootstrap-flask, requests, Jinja2, SQLAlchemy-serializer, Werkzeug и др.
+* WSGI-сервер waitress
 
 # Работа с внешними сервисами и другие функции
 * Реализовано взаимодействие с сервисами API Yandex Maps 
