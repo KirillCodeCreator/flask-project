@@ -24,7 +24,7 @@ def global_init(db_file):
     __factory = orm.sessionmaker(bind=engine)
     print(f"Подключение к БД: {conn_str} ...")
     SqlAlchemyBase.metadata.create_all(engine)
-
+    print(f"Подключено к БД: sqlite:///{db_file.strip()}")
 
 def create_session() -> Session:
     global __factory
