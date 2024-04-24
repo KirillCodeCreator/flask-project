@@ -1,4 +1,3 @@
-# класс для таблицы временных интервалов
 from sqlalchemy_serializer import SerializerMixin
 
 from data.db_session import SqlAlchemyBase

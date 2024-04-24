@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, jsonify, make_response, request
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
 
 from api.appointmentmessages import AppointmentMessages
 from api.appointmentrequired import AppointmentRequiredFields

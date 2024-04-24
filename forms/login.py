@@ -1,4 +1,3 @@
-from flask import url_for
 from flask_wtf import FlaskForm
 from wtforms import EmailField, BooleanField, PasswordField, SubmitField, URLField
 from wtforms.validators import DataRequired

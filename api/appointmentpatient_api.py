@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from flask import Blueprint, jsonify, make_response, request, session
-from sqlalchemy import and_, or_
+from flask import Blueprint, jsonify, make_response, request
+from sqlalchemy import and_
 
 from api.appointmentmessages import AppointmentMessages
 from api.appointmentpatientsrequired import AppointmentPatientsRequiredFields
@@ -23,6 +23,7 @@ def get_appointments():
         {"appointmentpatients": [appointmentpatient.to_dict() for appointmentpatient in appointmentpatients]}
     )
 
+
 @appointmentpatient_api.route("/api/appointmentpatients/patient/<int:patient_id>")
 def get_patient_appointments(patient_id):
     db_sess = db_session.create_session()
@@ -41,6 +42,7 @@ def get_appointment(appointmentpatient_id):
     return jsonify(
         {"appointmentpatients": [appointmentpatient.to_dict()]}
     )
+
 
 @appointmentpatient_api.route("/api/appointmentpatients", methods=["POST"])
 def create():
@@ -72,7 +74,6 @@ def create():
         return jsonify({'message': AppointmentMessages().AppointmentCreated()})
     except Exception as e:
         return jsonify({'message': AppointmentMessages().AppointmentExists()})
-
 
 
 @appointmentpatient_api.route("/api/appointmentpatients/<int:appointmentpatient_id>", methods=["PUT"])

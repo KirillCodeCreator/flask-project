@@ -41,6 +41,7 @@ class SpecializationResource(Resource):
         db_sess.commit()
         return jsonify({'success': 'OK', 'message': f'Специальность "{specialization.title}" успешно удалена'})
 
+
 # описываем методы для доступа к списку специализаций врачей
 class SpecializationsListResource(Resource):
     def get(self):

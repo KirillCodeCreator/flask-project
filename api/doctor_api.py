@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from flask import Blueprint, jsonify, request, make_response
 
 from api.usermessages import UserMessages
@@ -21,27 +22,30 @@ def get_doctors():
         {"doctors": [doctor.to_dict() for doctor in doctors]}
     )
 
+
 @doctor_api.route("/api/doctors/appointmentpatients/<int:doctor_id>")
 def get_doctor_appointments(doctor_id):
-
     db_sess = db_session.create_session()
 
     appointments = (db_sess.query(Appointment).filter(Appointment.doctor_id == doctor_id).all())
 
-    result=[]
+    result = []
     for ap in appointments:
         appointmentPatients = db_sess.query(AppointmentPatient).filter(AppointmentPatient.appointment_id == ap.id).all()
         if appointmentPatients:
             for p in appointmentPatients:
-                r = {"id":ap.id,"date": ap.date.strftime("%Y-%m-%d"), "time": ap.timeinterval.starttime.strftime("%H:%M"), "patient": p.patient.full_name(), "result": p.result }
+                r = {"id": ap.id, "date": ap.date.strftime("%Y-%m-%d"),
+                     "time": ap.timeinterval.starttime.strftime("%H:%M"), "patient": p.patient.full_name(),
+                     "result": p.result}
                 result.append(r)
         else:
-            r = {"id":ap.id, "date": ap.date.strftime("%Y-%m-%d"), "time": ap.timeinterval.starttime.strftime("%H:%M")}
+            r = {"id": ap.id, "date": ap.date.strftime("%Y-%m-%d"), "time": ap.timeinterval.starttime.strftime("%H:%M")}
             result.append(r)
 
     return jsonify(
         {"appointments": [item for item in result]}
     )
+
 
 @doctor_api.route("/api/doctors/<int:doctor_id>")
 def get_doctor(doctor_id):
@@ -52,6 +56,7 @@ def get_doctor(doctor_id):
     return jsonify(
         {"doctors": [doctor.to_dict()]}
     )
+
 
 @doctor_api.route("/api/doctors", methods=["POST"])
 def create_doctor():
@@ -79,7 +84,7 @@ def create_doctor():
         role=Roles.DOCTOR,
         email=request.json["email"],
         hashed_password=password_hash,
-        location = request.json["location"],
+        location=request.json["location"],
         modified_date=datetime.now(),
     )
     if db_sess.query(User).filter(User.email == doctor.email).first():
