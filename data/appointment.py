@@ -2,10 +2,8 @@ from datetime import datetime
 
 import sqlalchemy as sa
 from sqlalchemy import orm
-from sqlalchemy.orm import Mapped
 from sqlalchemy_serializer import SerializerMixin
 
-from data.appointmentpatient import AppointmentPatient
 from data.db_session import SqlAlchemyBase
 
 

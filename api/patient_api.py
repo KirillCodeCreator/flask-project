@@ -54,7 +54,7 @@ def create_patient():
         polis=request.json["polis"],
         email=request.json["email"],
         hashed_password=password_hash,
-        location = request.json["location"],
+        location=request.json["location"],
         modified_date=datetime.now(),
     )
     if db_sess.query(User).filter(User.email == patient.email).first():

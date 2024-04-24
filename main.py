@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, redirect, flash, request, make_response, jsonify, session, url_for
+from flask import Flask, render_template, redirect, flash, request, make_response, jsonify, url_for
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_restful import Api
 from waitress import serve
@@ -49,6 +49,10 @@ def load_user(user_id):
 
 @app.route("/register-doctor", methods=['GET', 'POST'])
 def register_doctor():
+    if current_user.is_authenticated:
+        if not current_user.is_doctor():
+            return make_response(jsonify({"message": 'Sorry, you have no access to page'}), 403)
+        return redirect(url_for('show_doctor_appointments'))
     form = RegisterDoctorForm()
     resp = requests.get(f'{request.host_url}/api/specializations')
     if not resp:
@@ -93,6 +97,10 @@ def register_doctor():
 
 @app.route('/register-patient', methods=['GET', 'POST'])
 def register_patient():
+    if current_user.is_authenticated:
+        if not current_user.is_patient():
+            return make_response(jsonify({"message": 'Sorry, you have no access to page'}), 403)
+        return redirect(url_for('show_patient_appointments'))
     form = RegisterPatientForm()
     if form.validate_on_submit():
         if form.validate_on_submit():
@@ -144,7 +152,7 @@ def login():
             elif user.role == Roles.ADMIN:
                 return redirect(url_for('doctor_wall'))
         flash("Неправильный логин или пароль", "danger")
-        return render_template("login.html", form=form)
+        return render_template("login.html", form=form, title="Авторизация пользователя")
     return render_template("login.html", title="Авторизация пользователя", form=form)
 
 
@@ -241,7 +249,8 @@ def patient_appointment_cancel(patientappointment_id):
 
     resp = requests.get(f'{request.host_url}api/appointmentpatients/patient/{current_user.id}')
     appointmentpatients = resp.json()["appointmentpatients"]
-    return render_template('patient_appointments.html', appointmentpatients=appointmentpatients, menu=patient_menu)
+    return render_template('patient_appointments.html', title="Ваши записи к врачам",
+                           appointmentpatients=appointmentpatients, menu=patient_menu)
 
 
 @app.route('/patient/appointments/show_map/<int:patientappointment_id>')
@@ -488,7 +497,7 @@ def main():
     app.register_blueprint(appointmentpatient_api.appointmentpatient_api)
     add_api_specializations_routes(api)
     serve(app, host="0.0.0.0", port=5000)
-    #app.run("", port=5000)
+    # app.run("", port=5000)
 
 
 @app.route("/doctor-help")
