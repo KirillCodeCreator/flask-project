@@ -27,7 +27,7 @@ def get_appointments():
 @appointmentpatient_api.route("/api/appointmentpatients/patient/<int:patient_id>")
 def get_patient_appointments(patient_id):
     db_sess = db_session.create_session()
-    appointmentpatients = db_sess.query(AppointmentPatient).filter(User.id == patient_id).all()
+    appointmentpatients = db_sess.query(AppointmentPatient).filter(AppointmentPatient.patient_id == patient_id).all()
     return jsonify(
         {"appointmentpatients": [appointmentpatient.to_dict() for appointmentpatient in appointmentpatients]}
     )
